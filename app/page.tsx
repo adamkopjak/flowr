@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { AIChatPanel, AIOrb } from "@/components/AIChat";
 import { ChartCard } from "@/components/ChartCard";
@@ -12,11 +13,13 @@ import { SectionTitle, SkeletonCard } from "@/components/SectionTitle";
 import { StatCard } from "@/components/StatCard";
 import { fetchCoins, type Coin } from "@/lib/coingecko";
 import { fmtBig } from "@/lib/format";
+import { readInitialTheme, type Theme } from "@/lib/theme";
 
 const NAV = ["Markets", "Portfolio", "Watchlist", "News"];
 
 export default function Page() {
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const router = useRouter();
+  const [theme, setTheme] = useState<Theme>(readInitialTheme);
   const [coins, setCoins] = useState<Coin[]>([]);
   const [source, setSource] = useState<"loading" | "live" | "fallback">(
     "loading",
@@ -27,10 +30,10 @@ export default function Page() {
   const [watch, setWatch] = useState<Set<string>>(new Set());
   const [chatOpen, setChatOpen] = useState(false);
 
+  const goToCoin = (coin: Coin) => router.push(`/coin/${coin.id}`);
+
   useEffect(() => {
     try {
-      const t = localStorage.getItem("flowr-theme");
-      if (t === "dark" || t === "light") setTheme(t);
       const w = JSON.parse(
         localStorage.getItem("flowr-watch") || "[]",
       ) as string[];
@@ -306,7 +309,7 @@ export default function Page() {
         {loading || coins.length === 0
           ? [0, 1, 2].map((i) => <SkeletonCard key={i} h={220} />)
           : topMovers.map((c, i) => (
-              <MoverCard key={c.id} coin={c} rank={i} />
+              <MoverCard key={c.id} coin={c} rank={i} onSelect={goToCoin} />
             ))}
       </section>
 
@@ -320,7 +323,9 @@ export default function Page() {
       <section className="grid-three" style={{ marginBottom: 28 }}>
         {loading || coins.length === 0
           ? [0, 1, 2].map((i) => <SkeletonCard key={i} h={240} />)
-          : featured.map((c) => <ChartCard key={c.id} coin={c} />)}
+          : featured.map((c) => (
+              <ChartCard key={c.id} coin={c} onSelect={goToCoin} />
+            ))}
       </section>
 
       {coins.length > 0 && (
@@ -380,7 +385,7 @@ export default function Page() {
               idx={i}
               isWatched={watch.has(c.id)}
               onWatch={toggleWatch}
-              onSelect={() => setChatOpen(true)}
+              onSelect={goToCoin}
             />
           ))
         )}
