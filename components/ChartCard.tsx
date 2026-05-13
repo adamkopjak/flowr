@@ -3,7 +3,7 @@
 import type { Coin } from "@/lib/coingecko";
 import { fmtPct, fmtPrice } from "@/lib/format";
 import { CoinGlyph } from "./CoinGlyph";
-import { Sparkline } from "./Sparkline";
+import { PriceChart } from "./PriceChart";
 
 export function ChartCard({ coin }: { coin: Coin }) {
   const pos = (coin.price_change_percentage_24h ?? 0) >= 0;
@@ -95,7 +95,7 @@ export function ChartCard({ coin }: { coin: Coin }) {
       </div>
 
       <div style={{ margin: "0 -8px" }}>
-        <Sparkline data={points} height={86} positive={pos} />
+        <PriceChart data={points} height={86} positive={pos} />
       </div>
 
       <div
