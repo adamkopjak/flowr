@@ -359,7 +359,7 @@ button {
   gap: 18px;
   align-items: start;
 }
-.coin-main {
+.coin-main :first-child {
   display: flex;
   flex-direction: column;
   gap: 18px;

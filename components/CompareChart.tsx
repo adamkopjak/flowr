@@ -267,7 +267,6 @@ export function CompareChart({
       {hoverIdx != null && (
         <div
           style={{
-            position: "absolute",
             left: Math.min(w - 200, Math.max(0, toX(hoverIdx) + 12)),
             top: 12,
             background: "var(--bg-elev)",

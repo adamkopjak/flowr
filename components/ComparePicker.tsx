@@ -89,7 +89,6 @@ export function ComparePicker({
         <div
           className="compare-dropdown"
           style={{
-            position: "absolute",
             top: "calc(100% + 8px)",
             left: 0,
             zIndex: 50,
