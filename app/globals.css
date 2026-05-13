@@ -347,6 +347,119 @@ button {
   }
 }
 
+/* ---- coin page layout ---- */
+.coin-page {
+  max-width: 1340px;
+  margin: 0 auto;
+  padding: 32px 28px 96px;
+}
+.coin-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 18px;
+  align-items: start;
+}
+.coin-main {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+}
+.data-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+.hero-price {
+  font-size: 34px;
+}
+.hero-title {
+  font-size: 24px;
+}
+.chart-card {
+  padding: 24px;
+}
+.chart-card-header {
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.chart-h {
+  height: 360px;
+}
+.breadcrumb-trail {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+.dashboard-link-text {
+  display: inline;
+}
+
+@media (max-width: 900px) {
+  .coin-page {
+    padding: 22px 18px 96px;
+  }
+  .coin-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .data-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .sidebar-coins {
+    max-height: 320px;
+  }
+  .coin-sidebar {
+    position: static !important;
+    order: 2;
+  }
+  .coin-main {
+    order: 1;
+  }
+}
+@media (max-width: 640px) {
+  .breadcrumb-trail {
+    display: none;
+  }
+  .hero-price {
+    font-size: 28px;
+  }
+  .hero-title {
+    font-size: 20px;
+  }
+  .chart-card {
+    padding: 18px;
+  }
+  .chart-h {
+    height: 280px;
+  }
+}
+@media (max-width: 560px) {
+  .coin-page {
+    padding: 18px 14px 110px;
+  }
+  .data-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .coin-header-actions {
+    gap: 6px !important;
+  }
+  .coin-back-link {
+    padding: 8px 10px !important;
+  }
+  .dashboard-link-text {
+    display: none;
+  }
+  .chart-h {
+    height: 240px;
+  }
+  .compare-dropdown {
+    width: calc(100vw - 56px) !important;
+    max-width: 320px;
+  }
+}
+
 @keyframes typingDot {
   0%,
   100% {

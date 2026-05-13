@@ -5,7 +5,13 @@ import { fmtPct, fmtPrice } from "@/lib/format";
 import { CoinGlyph } from "./CoinGlyph";
 import { PriceChart } from "./PriceChart";
 
-export function ChartCard({ coin }: { coin: Coin }) {
+export function ChartCard({
+  coin,
+  onSelect,
+}: {
+  coin: Coin;
+  onSelect?: (c: Coin) => void;
+}) {
   const pos = (coin.price_change_percentage_24h ?? 0) >= 0;
   const points = coin.sparkline_in_7d?.price || [];
   const low = points.length ? Math.min(...points) : 0;
@@ -14,11 +20,13 @@ export function ChartCard({ coin }: { coin: Coin }) {
   return (
     <div
       className="card fade-up"
+      onClick={() => onSelect?.(coin)}
       style={{
         padding: 20,
         display: "flex",
         flexDirection: "column",
         gap: 14,
+        cursor: onSelect ? "pointer" : "default",
       }}
     >
       <div
