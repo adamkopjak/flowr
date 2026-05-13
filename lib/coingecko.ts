@@ -45,17 +45,16 @@ export const FALLBACK_COINS: Coin[] = [
 ];
 
 export async function fetchCoins(): Promise<FetchResult> {
-  const url =
-    "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=25&page=1&sparkline=true&price_change_percentage=24h";
   try {
-    const r = await fetch(url, { headers: { accept: "application/json" } });
+    const r = await fetch("/api/coins", { cache: "no-store" });
     if (!r.ok) throw new Error("http " + r.status);
-    const data = (await r.json()) as Coin[];
-    if (!Array.isArray(data) || data.length === 0) throw new Error("empty");
-    return { coins: data, source: "live" };
+    const data = (await r.json()) as FetchResult;
+    if (!Array.isArray(data.coins) || data.coins.length === 0)
+      throw new Error("empty");
+    return data;
   } catch (e) {
     console.warn(
-      "[flowr] CoinGecko unavailable, using fallback data:",
+      "[flowr] /api/coins unavailable, using fallback data:",
       (e as Error).message,
     );
     return { coins: FALLBACK_COINS, source: "fallback" };

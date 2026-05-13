@@ -67,23 +67,6 @@ const SUGGESTIONS = [
 
 type Msg = { role: "bot" | "user"; text: string };
 
-function buildStubReply(q: string, coins: Coin[]): string {
-  const needle = q.toLowerCase();
-  const match = coins.find(
-    (c) =>
-      needle.includes(c.symbol.toLowerCase()) ||
-      needle.includes(c.name.toLowerCase()),
-  );
-  if (match) {
-    const dir =
-      (match.price_change_percentage_24h ?? 0) >= 0 ? "up" : "down";
-    return `${match.name} (${match.symbol.toUpperCase()}) is trading near $${match.current_price.toLocaleString()}, ${dir} ${Math.abs(
-      match.price_change_percentage_24h ?? 0,
-    ).toFixed(2)}% in the last 24h. Connect your own LLM endpoint to /api/chat for richer answers.`;
-  }
-  return "I'm a placeholder for now — wire up your own LLM at /api/chat to get real answers. Try asking about a specific coin (e.g. BTC, ETH, SOL).";
-}
-
 export function AIChatPanel({
   open,
   setOpen,
@@ -115,15 +98,36 @@ export function AIChatPanel({
     setMessages((m) => [...m, { role: "user", text: q }]);
     setLoading(true);
 
-    await new Promise((res) => setTimeout(res, 600));
-    setMessages((m) => [
-      ...m,
-      {
-        role: "bot",
-        text: buildStubReply(q, coins),
-      },
-    ]);
-    setLoading(false);
+    try {
+      const r = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          question: q,
+          coins: coins.slice(0, 8).map((c) => ({
+            name: c.name,
+            symbol: c.symbol,
+            price: c.current_price,
+            change24h: c.price_change_percentage_24h,
+          })),
+        }),
+      });
+      const data = (await r.json()) as { reply?: string };
+      setMessages((m) => [
+        ...m,
+        {
+          role: "bot",
+          text: data.reply?.trim() || "Hmm, I couldn't find an answer for that.",
+        },
+      ]);
+    } catch {
+      setMessages((m) => [
+        ...m,
+        { role: "bot", text: "I'm offline right now — try again in a moment." },
+      ]);
+    } finally {
+      setLoading(false);
+    }
   }
 
   if (!open) return null;
