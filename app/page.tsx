@@ -7,6 +7,7 @@ import { ChartCard } from "@/components/ChartCard";
 import { FlowrLogo } from "@/components/FlowrLogo";
 import { MarketTicker } from "@/components/MarketTicker";
 import { MobileMenu, MobileMenuButton } from "@/components/MobileMenu";
+import { ConnectWalletButton } from "@/components/Wallet";
 import { MoverCard } from "@/components/MoverCard";
 import { PriceRow, PriceRowHeader } from "@/components/PriceRow";
 import { SearchBar, type FilterKey } from "@/components/SearchBar";
@@ -258,22 +259,7 @@ export default function Page() {
               </svg>
             )}
           </button>
-          <button
-            className="sign-in-btn"
-            style={{
-              background: "var(--text)",
-              color: "var(--bg)",
-              border: "none",
-              padding: "10px 18px",
-              borderRadius: 999,
-              fontSize: 13,
-              fontWeight: 600,
-              cursor: "pointer",
-              fontFamily: "inherit",
-            }}
-          >
-            Sign in
-          </button>
+          <ConnectWalletButton className="sign-in-btn" />
           <MobileMenuButton onOpen={() => setMenuOpen(true)} />
         </div>
       </header>

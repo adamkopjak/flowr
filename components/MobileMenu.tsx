@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, type CSSProperties, type ReactNode } from "react";
 import { FlowrLogo } from "@/components/FlowrLogo";
+import { ConnectWalletButton } from "@/components/Wallet";
 import type { Theme } from "@/lib/theme";
 
 export type MobileMenuKey =
@@ -473,24 +474,9 @@ export function MobileMenu({
             {theme === "dark" ? "Dark" : "Light"}
           </button>
 
-          <button
-            className="focus-ring"
-            style={{
-              background: "var(--text)",
-              color: "var(--bg)",
-              border: "none",
-              padding: "11px 18px",
-              borderRadius: 999,
-              cursor: "pointer",
-              fontSize: 13,
-              fontWeight: 600,
-              fontFamily: "inherit",
-              flex: 1,
-              maxWidth: 200,
-            }}
-          >
-            Sign in
-          </button>
+          <div style={{ flex: 1, maxWidth: 220, minWidth: 0 }}>
+            <ConnectWalletButton fullWidth />
+          </div>
         </div>
       </div>
     </>
