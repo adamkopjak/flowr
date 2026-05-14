@@ -359,7 +359,7 @@ button {
   gap: 18px;
   align-items: start;
 }
-.coin-main :first-child {
+.coin-main :first{
   display: flex;
   flex-direction: column;
   gap: 18px;
@@ -457,6 +457,7 @@ button {
   .compare-dropdown {
     width: calc(100vw - 56px) !important;
     max-width: 320px;
+    position: absolute !important;
   }
 }
 
