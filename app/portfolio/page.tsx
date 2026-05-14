@@ -9,6 +9,7 @@ import {
   HoldingsCarousel,
   type Holding,
 } from "@/components/HoldingsCarousel";
+import { MobileMenu, MobileMenuButton } from "@/components/MobileMenu";
 import {
   PortfolioChart,
   type PortfolioRangeKey,
@@ -77,6 +78,7 @@ export default function PortfolioPage() {
   const [chartMode, setChartMode] = useState<"wallet" | "coin">("wallet");
   const [range, setRange] = useState<PortfolioRangeKey>("7d");
   const [chatOpen, setChatOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
@@ -228,6 +230,7 @@ export default function PortfolioPage() {
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             aria-label="Toggle theme"
+            className="header-theme-toggle"
             style={{
               background: "var(--surface)",
               border: "1px solid var(--border)",
@@ -291,6 +294,7 @@ export default function PortfolioPage() {
           >
             Sign in
           </button>
+          <MobileMenuButton onOpen={() => setMenuOpen(true)} />
         </div>
       </header>
 
@@ -686,6 +690,13 @@ export default function PortfolioPage() {
         open={chatOpen}
         setOpen={setChatOpen}
         coins={[activeCoin].filter((c): c is Coin => Boolean(c))}
+      />
+      <MobileMenu
+        open={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        current="portfolio"
+        theme={theme}
+        onToggleTheme={() => setTheme(theme === "dark" ? "light" : "dark")}
       />
     </div>
   );

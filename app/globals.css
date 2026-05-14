@@ -545,6 +545,22 @@ button {
   }
 }
 
+/* ---- mobile menu ---- */
+.mobile-menu-btn {
+  display: none;
+  place-items: center;
+}
+@media (max-width: 560px) {
+  .mobile-menu-btn {
+    display: grid;
+  }
+  .header-theme-toggle,
+  .coin-back-link,
+  .header-live-chip {
+    display: none !important;
+  }
+}
+
 @keyframes typingDot {
   0%,
   100% {
