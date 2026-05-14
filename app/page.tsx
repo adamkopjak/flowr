@@ -19,8 +19,7 @@ import { readInitialTheme, type Theme } from "@/lib/theme";
 const NAV: { label: string; href: string }[] = [
   { label: "Markets", href: "/" },
   { label: "Portfolio", href: "/portfolio" },
-  { label: "Watchlist", href: "#" },
-  { label: "News", href: "#" },
+  { label: "News", href: "/news" },
 ];
 
 export default function Page() {
