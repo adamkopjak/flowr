@@ -15,7 +15,12 @@ import { fetchCoins, type Coin } from "@/lib/coingecko";
 import { fmtBig } from "@/lib/format";
 import { readInitialTheme, type Theme } from "@/lib/theme";
 
-const NAV = ["Markets", "Portfolio", "Watchlist", "News"];
+const NAV: { label: string; href: string }[] = [
+  { label: "Markets", href: "/" },
+  { label: "Portfolio", href: "/portfolio" },
+  { label: "Watchlist", href: "#" },
+  { label: "News", href: "#" },
+];
 
 export default function Page() {
   const router = useRouter();
@@ -154,8 +159,8 @@ export default function Page() {
           <nav className="nav-links">
             {NAV.map((n, i) => (
               <a
-                key={n}
-                href="#"
+                key={n.label}
+                href={n.href}
                 style={{
                   padding: "8px 14px",
                   fontSize: 13,
@@ -169,7 +174,7 @@ export default function Page() {
                     (i === 0 ? "var(--border)" : "transparent"),
                 }}
               >
-                {n}
+                {n.label}
               </a>
             ))}
           </nav>
@@ -404,6 +409,7 @@ export default function Page() {
       >
         <span>flowr. · prices from CoinGecko · refresh every 60s</span>
         <span>{coins.length} assets tracked</span>
+        <span>Made by: adamkopjak</span>
       </footer>
 
       <AIOrb open={chatOpen} setOpen={setChatOpen} pulse />
