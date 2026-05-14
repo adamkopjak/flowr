@@ -10,3 +10,5 @@ Next.js 14, TS, Tailwind and Groq AI.
 - Biggest movers with price charts
 - Personal AI market analyst cahtbot
 - dark/light mode
+- Portfolio to check coins
+- Responsive design with mobile menu

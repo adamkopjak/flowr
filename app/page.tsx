@@ -6,6 +6,7 @@ import { AIChatPanel, AIOrb } from "@/components/AIChat";
 import { ChartCard } from "@/components/ChartCard";
 import { FlowrLogo } from "@/components/FlowrLogo";
 import { MarketTicker } from "@/components/MarketTicker";
+import { MobileMenu, MobileMenuButton } from "@/components/MobileMenu";
 import { MoverCard } from "@/components/MoverCard";
 import { PriceRow, PriceRowHeader } from "@/components/PriceRow";
 import { SearchBar, type FilterKey } from "@/components/SearchBar";
@@ -15,7 +16,12 @@ import { fetchCoins, type Coin } from "@/lib/coingecko";
 import { fmtBig } from "@/lib/format";
 import { readInitialTheme, type Theme } from "@/lib/theme";
 
-const NAV = ["Markets", "Portfolio", "Watchlist", "News"];
+const NAV: { label: string; href: string }[] = [
+  { label: "Markets", href: "/" },
+  { label: "Portfolio", href: "/portfolio" },
+  { label: "Watchlist", href: "#" },
+  { label: "News", href: "#" },
+];
 
 export default function Page() {
   const router = useRouter();
@@ -29,6 +35,7 @@ export default function Page() {
   const [filter, setFilter] = useState<FilterKey>("all");
   const [watch, setWatch] = useState<Set<string>>(new Set());
   const [chatOpen, setChatOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const goToCoin = (coin: Coin) => router.push(`/coin/${coin.id}`);
 
@@ -154,8 +161,8 @@ export default function Page() {
           <nav className="nav-links">
             {NAV.map((n, i) => (
               <a
-                key={n}
-                href="#"
+                key={n.label}
+                href={n.href}
                 style={{
                   padding: "8px 14px",
                   fontSize: 13,
@@ -169,14 +176,17 @@ export default function Page() {
                     (i === 0 ? "var(--border)" : "transparent"),
                 }}
               >
-                {n}
+                {n.label}
               </a>
             ))}
           </nav>
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div className="chip" style={{ padding: "6px 12px" }}>
+          <div
+            className="chip header-live-chip"
+            style={{ padding: "6px 12px" }}
+          >
             <span
               style={{
                 width: 6,
@@ -201,6 +211,7 @@ export default function Page() {
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             aria-label="Toggle theme"
+            className="header-theme-toggle"
             style={{
               background: "var(--surface)",
               border: "1px solid var(--border)",
@@ -264,6 +275,7 @@ export default function Page() {
           >
             Sign in
           </button>
+          <MobileMenuButton onOpen={() => setMenuOpen(true)} />
         </div>
       </header>
 
@@ -404,10 +416,18 @@ export default function Page() {
       >
         <span>flowr. · prices from CoinGecko · refresh every 60s</span>
         <span>{coins.length} assets tracked</span>
+        <span>Made by: adamkopjak</span>
       </footer>
 
       <AIOrb open={chatOpen} setOpen={setChatOpen} pulse />
       <AIChatPanel open={chatOpen} setOpen={setChatOpen} coins={coins} />
+      <MobileMenu
+        open={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        current="markets"
+        theme={theme}
+        onToggleTheme={() => setTheme(theme === "dark" ? "light" : "dark")}
+      />
     </div>
   );
 }

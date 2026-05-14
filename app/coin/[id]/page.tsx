@@ -10,6 +10,7 @@ import { CompareChip } from "@/components/CompareChip";
 import { ComparePicker } from "@/components/ComparePicker";
 import { DataStat } from "@/components/DataStat";
 import { FlowrLogo } from "@/components/FlowrLogo";
+import { MobileMenu, MobileMenuButton } from "@/components/MobileMenu";
 import { SidebarCoin } from "@/components/SidebarCoin";
 import { fetchCoins, type Coin } from "@/lib/coingecko";
 import { fmtBig, fmtPct, fmtPrice } from "@/lib/format";
@@ -35,6 +36,7 @@ export default function CoinPage() {
   const [compareIds, setCompareIds] = useState<string[]>([]);
   const [range, setRange] = useState<RangeKey>("7d");
   const [chatOpen, setChatOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [sidebarQ, setSidebarQ] = useState("");
 
   useEffect(() => {
@@ -220,6 +222,7 @@ export default function CoinPage() {
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             aria-label="Toggle theme"
+            className="header-theme-toggle"
             style={{
               background: "var(--surface)",
               border: "1px solid var(--border)",
@@ -283,6 +286,7 @@ export default function CoinPage() {
           >
             Sign in
           </button>
+          <MobileMenuButton onOpen={() => setMenuOpen(true)} />
         </div>
       </header>
 
@@ -664,6 +668,13 @@ export default function CoinPage() {
         open={chatOpen}
         setOpen={setChatOpen}
         coins={[coin, ...compareCoins].filter((c): c is Coin => Boolean(c))}
+      />
+      <MobileMenu
+        open={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        current="coin"
+        theme={theme}
+        onToggleTheme={() => setTheme(theme === "dark" ? "light" : "dark")}
       />
     </div>
   );
