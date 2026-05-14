@@ -5,7 +5,12 @@ import { useEffect, type CSSProperties, type ReactNode } from "react";
 import { FlowrLogo } from "@/components/FlowrLogo";
 import type { Theme } from "@/lib/theme";
 
-export type MobileMenuKey = "markets" | "portfolio" | "coin" | "watchlist";
+export type MobileMenuKey =
+  | "markets"
+  | "portfolio"
+  | "coin"
+  | "watchlist"
+  | "news";
 
 export function MobileMenuButton({ onOpen }: { onOpen: () => void }) {
   return (
@@ -122,6 +127,31 @@ const ITEMS: Item[] = [
           d="M9 5 V 9 L11.5 11"
           stroke="currentColor"
           strokeWidth="1.5"
+          strokeLinecap="round"
+        />
+      </svg>
+    ),
+  },
+  {
+    key: "news",
+    label: "News",
+    href: "/news",
+    desc: "Headlines with AI sentiment",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <rect
+          x="2.5"
+          y="3.5"
+          width="13"
+          height="11"
+          rx="2"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        />
+        <path
+          d="M5 7 H 13 M5 10 H 13 M5 12.5 H 10"
+          stroke="currentColor"
+          strokeWidth="1.4"
           strokeLinecap="round"
         />
       </svg>
