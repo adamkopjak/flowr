@@ -17,8 +17,9 @@ import {
 } from "@/components/PortfolioChart";
 import { fetchCoins, type Coin } from "@/lib/coingecko";
 import { readInitialTheme, type Theme } from "@/lib/theme";
+import { useWalletHoldings } from "@/lib/useWalletHoldings";
 
-const HOLDINGS: Holding[] = [
+const DEMO_HOLDINGS: Holding[] = [
   { coinId: "bitcoin", amount: 0.4521 },
   { coinId: "ethereum", amount: 4.2 },
   { coinId: "solana", amount: 32.5 },
@@ -81,6 +82,16 @@ export default function PortfolioPage() {
   const [chatOpen, setChatOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const wallet = useWalletHoldings();
+  // Filter wallet holdings to coins our dashboard has data for, otherwise the
+  // carousel can't render them and the chart math is undefined.
+  const realHoldings = useMemo(
+    () => wallet.holdings.filter((h) => coins.some((c) => c.id === h.coinId)),
+    [wallet.holdings, coins],
+  );
+  const usingReal = wallet.isConnected && realHoldings.length > 0;
+  const HOLDINGS = usingReal ? realHoldings : DEMO_HOLDINGS;
+
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
     try {
@@ -105,6 +116,11 @@ export default function PortfolioPage() {
       clearInterval(id);
     };
   }, []);
+
+  // Clamp activeIdx when holdings change (e.g., switching wallet/chain).
+  useEffect(() => {
+    if (activeIdx >= HOLDINGS.length && HOLDINGS.length > 0) setActiveIdx(0);
+  }, [HOLDINGS, activeIdx]);
 
   const activeHolding = HOLDINGS[activeIdx];
   const activeCoin = coins.find((c) => c.id === activeHolding?.coinId);
@@ -132,7 +148,7 @@ export default function PortfolioPage() {
       }
     });
     return out;
-  }, [coins]);
+  }, [coins, HOLDINGS]);
 
   const coinSeries = useMemo(() => {
     if (!activeCoin || !activeHolding) return [] as number[];
@@ -192,6 +208,30 @@ export default function PortfolioPage() {
               }}
             >
               Portfolio
+            </span>
+            <span
+              title={
+                usingReal
+                  ? "Showing on-chain balances from your connected wallet"
+                  : wallet.isConnected
+                    ? "Connected, but no supported balances on this chain — try switching networks"
+                    : "Connect a wallet to see your real holdings"
+              }
+              style={{
+                fontSize: 10,
+                fontWeight: 600,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                padding: "3px 8px",
+                borderRadius: 999,
+                border: "1px solid var(--border)",
+                background: usingReal
+                  ? "color-mix(in srgb, var(--accent) 18%, transparent)"
+                  : "var(--surface-2)",
+                color: usingReal ? "var(--accent)" : "var(--text-faint)",
+              }}
+            >
+              {usingReal ? "Live" : wallet.isConnected ? "Empty" : "Demo"}
             </span>
           </span>
         </div>
